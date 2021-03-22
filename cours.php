@@ -129,4 +129,43 @@
     // $a->test();
     // echo($a->nom);
 
+    class facture{
+        public $nb1;
+        public $nb2;
+        public const taux = 50;
+
+        function __construct($n1, $n2){
+            $this->nb1 = $n1;
+            $this->nb2 = $n2;
+        }
+
+        function addition(){
+            $x = $this->nb1 + $this->nb2;
+            return $x;
+        }
+    }
+    class chFacture extends facture{
+        function moyenne(){
+            $y = ($this->addition())/2;
+            return $y;
+        }
+        function remise(){
+            if($this->moyenne() >= self::taux){
+                return ($this->addition())*0.9;
+            }
+            else{
+                echo "Pas éligible.";
+            }
+        }
+    }
+    $test = new facture(45, 17);
+    echo ($test->addition());
+    echo "<br>";
+    $test2 = new chFacture(45, 55);
+    echo ($test2->moyenne());
+    echo "<br>";
+    echo ($test2->remise());
+    echo "<br>";
+    // pour l'affichage de la constante hors de l'objet
+    echo $test::taux."<br>";
 ?>
