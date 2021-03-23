@@ -167,5 +167,10 @@
     echo ($test2->remise());
     echo "<br>";
     // pour l'affichage de la constante hors de l'objet
-    echo $test::taux."<br>";
+    echo $test::taux."<br><br>";
+
+
+
+
+
 ?>
