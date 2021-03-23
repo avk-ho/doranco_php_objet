@@ -250,6 +250,116 @@
     // }
 
     //Exercice 3
-    
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "demo";
+
+    try{
+        $conn = new PDO("mysql:host=$servername;dbname=$dbname",$username,$password);
+        $conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+        echo "Connexion réussie<br>";
+
+        // $sql = "CREATE TABLE representation(id int(11) AUTO_INCREMENT PRIMARY KEY, 
+        // titre VARCHAR(255), 
+        // lieu VARCHAR(255)
+        // )";
+        // $conn->exec($sql);
+        // echo "Table créée<br>";
+        // $sql = "CREATE TABLE musicien(id_mus int(11) PRIMARY KEY, 
+        // nom VARCHAR(255), 
+        // id_rep INT(255), 
+        // FOREIGN KEY(id_rep) REFERENCES representation(id)
+        // )";
+        // $conn->exec($sql);
+        // echo "Table créée2<br>";
+        // $sql = "CREATE TABLE programme(Date TIMESTAMP,
+        // tarif FLOAT,
+        // id_rep INT(255), 
+        // FOREIGN KEY(id_rep) REFERENCES representation(id)
+        // )";
+        // $conn->exec($sql);
+        // echo "Table créée3<br>";
+
+        // $sql = "ALTER TABLE musicien 
+        // MODIFY id_mus INT(11) AUTO_INCREMENT";
+        // $conn->exec($sql);
+        // echo "Modification accomplie";
+
+        // $sql = "INSERT INTO representation (titre, lieu) VALUES
+        // ('TECH2', 'Allissa')";
+        // $conn->exec($sql);
+        // echo "Représentation ajoutée<br>";
+        // $sql = "INSERT INTO musicien (nom, id_rep) VALUES
+        // ('UsC', '5')";
+        // $conn->exec($sql);
+        // echo "Musicien ajouté<br>";
+        // $sql = "INSERT INTO programme (Date, tarif, id_rep) VALUES
+        // ('2018/09/18 20:00:00', 30, '5')";
+        // $conn->exec($sql);
+        // echo "Programme ajouté<br>";
+
+        // Liste des représentations
+        $req = $conn->prepare("SELECT * FROM representation");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        echo "<pre>";
+        echo "Listes représentations<br>";
+        print_r($result);
+        echo "<pre>";
+
+        // Listes des titres des représentations qui ont lieu au "Allissa"
+        $req = $conn->prepare("SELECT titre FROM representation WHERE lieu = 'Allissa'");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        echo "<pre>";
+        echo "Listes des titres des représentations qui ont lieu au Allissa<br>";
+        print_r($result);
+        echo "<pre>";
+
+        // Listes des musiciens et titres de leurs représentations
+        $req = $conn->prepare("SELECT nom, titre FROM musicien
+        INNER JOIN representation ON musicien.id_rep = representation.id");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        echo "<pre>";
+        echo "Listes des musiciens et titres de leurs représentations<br>";
+        print_r($result);
+        echo "<pre>";
+
+        // Titres, lieux et tarif pour le 25/07/2008
+        $req = $conn->prepare("SELECT titre, lieu, tarif FROM representation
+        INNER JOIN programme ON representation.id = programme.id_rep WHERE Date LIKE '%2008-07-25%'");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        echo "<pre>";
+        echo "Titres, lieux et tarif pour le 25/07/2008<br>";
+        print_r($result);
+        echo "<pre>";
+
+        // Nombre de musiciens à la représentation 4
+        $req = $conn->prepare("SELECT COUNT(nom) as nb FROM musicien
+        WHERE id_rep = 4");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        echo "<pre>";
+        echo "Nombre de musiciens à la représentation 4<br>";
+        print_r($result);
+        echo "<pre>";
+
+        // Représentations et dates où le tarif ne dépasse pas 20
+        $req = $conn->prepare("SELECT titre, lieu, date, tarif FROM representation
+        INNER JOIN programme ON representation.id = programme.id_rep WHERE tarif < 21");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        echo "<pre>";
+        echo "Liste des représentations et dates où le tarif ne dépasse pas 20<br>";
+        print_r($result);
+        echo "<pre>";
+
+    }
+    catch(PDOException $e){
+        echo "Erreur".$e->getMessage();
+    }
 
 ?>
