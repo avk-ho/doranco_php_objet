@@ -390,53 +390,49 @@
         )";
         $conn->exec($sql2);
         echo "Table créée";
+
+        
+        // Liste des employés, professions par salaire décroissant
+        $req = $conn->prepare("SELECT nom, profession, salaire 
+        FROM employe ORDER BY profession, salaire DESC");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        echo "<pre>";
+        echo "Liste des employés, professions par salaire décroissant<br>";
+        print_r($result);
+        echo "<pre>";
+
+        // Salaire moyen
+        $req = $conn->prepare("SELECT AVG(salaire) as salaire_moyen 
+        FROM employe");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        echo "<pre>";
+        print_r($result);
+        echo "<pre>";
+
+        // Salaire moyen par profession le moins élevé
+        $req = $conn->prepare("SELECT AVG(salaire) as salaire_moyen_min 
+        FROM employe GROUP BY profession ORDER BY salaire_moyen_min LIMIT 1;
+        ");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        echo "<pre>";
+        print_r($result);
+        echo "<pre>";
+        
+        // Liste des employés ayant une commission
+        $req = $conn->prepare("SELECT nom, profession, commission 
+        FROM employe WHERE commission IS NOT NULL
+        ");
+        $req->execute();
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        echo "<pre>";
+        echo "Liste des employés ayant une commission<br>"
+        print_r($result);
+        echo "<pre>";
+
     }
-
-    // Liste des employés, professions par salaire décroissant
-    $req = $conn->prepare("SELECT nom, profession, salaire 
-    FROM employe ORDER BY profession, salaire DESC");
-    $req->execute();
-    $result = $req->fetchAll(PDO::FETCH_ASSOC);
-    echo "<pre>";
-    echo "Liste des employés, professions par salaire décroissant<br>";
-    print_r($result);
-    echo "<pre>";
-
-    // Salaire moyen
-    $req = $conn->prepare("SELECT AVG(salaire) as salaire_moyen 
-    FROM employe");
-    $req->execute();
-    $result = $req->fetchAll(PDO::FETCH_ASSOC);
-    echo "<pre>";
-    print_r($result);
-    echo "<pre>";
-
-    // Salaire moyen par profession le moins élevé
-    $req = $conn->prepare("SELECT AVG(salaire) as salaire_moyen_min 
-    FROM employe GROUP BY profession ORDER BY salaire_moyen_min LIMIT 1;
-    ");
-    $req->execute();
-    $result = $req->fetchAll(PDO::FETCH_ASSOC);
-    echo "<pre>";
-    print_r($result);
-    echo "<pre>";
-    
-    // Liste des employés ayant une commission
-    $req = $conn->prepare("SELECT nom, profession, commission 
-    FROM employe WHERE commission IS NOT NULL
-    ");
-    $req->execute();
-    $result = $req->fetchAll(PDO::FETCH_ASSOC);
-    echo "<pre>";
-    echo "Liste des employés ayant une commission<br>"
-    print_r($result);
-    echo "<pre>";
-
-        catch(PDOException $e){
-            echo "Erreur".$e->getMessage();
-        }
-
-
 
     catch(PDOException $e){
         echo "Erreur".$e->getMessage();
