@@ -428,7 +428,7 @@
         $req->execute();
         $result = $req->fetchAll(PDO::FETCH_ASSOC);
         echo "<pre>";
-        echo "Liste des employés ayant une commission<br>"
+        echo "Liste des employés ayant une commission<br>";
         print_r($result);
         echo "<pre>";
 
